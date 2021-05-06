@@ -5,24 +5,22 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import { Navbar } from '../components/Navbar';
-import { CoffeScreen } from '../pages/CoffeScreen';
+
 import { LoginScreen } from '../pages/LoginScreen';
+import { RegisterScreen } from '../pages/RegisterScreen';
+import { DashboardRoutes } from './DashboardRoutes';
 
 export const AppRouter = () => {
   return (
     <Router>
-      <Navbar />
-
       <div>
         <Switch>
-          <Route path="/login">
-            <LoginScreen />
-          </Route>
 
-          <Route path="/">
-            <CoffeScreen />
-          </Route>
+          <Route exact path="/login" component={ LoginScreen } />
+
+          <Route exact path="/register" component={ RegisterScreen } />
+
+          <Route path="/" component={ DashboardRoutes } />
 
           <Redirect to="/" />
 

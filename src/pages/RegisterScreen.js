@@ -3,18 +3,24 @@ import { Link } from 'react-router-dom'
 
 import './styles.css'
 
-export const LoginScreen = () => {
+export const RegisterScreen = () => {
 
 
 
     return (
         <>
             <form className="box" >
-                <h1>Iniciar sesión</h1>
+                <h1>Registro</h1>
                 <input 
                     type="text" 
                     name="" 
-                    placeholder="Email" 
+                    placeholder="Nombre" 
+                />
+
+                <input 
+                    type="text" 
+                    name="" 
+                    placeholder="Correo" 
                 />
 
                 <input 
@@ -26,14 +32,14 @@ export const LoginScreen = () => {
                 <input 
                     type="submit" 
                     name="" 
-                    value="Entrar" 
+                    value="Ingresar" 
                 />
 
                 <Link 
-                    to="/register" 
+                    to="/login" 
                     className="link"
                 >
-                    Crear nuevo usuario
+                    Ya tienes una cuenta?
                 </Link>
             </form>
         </>
