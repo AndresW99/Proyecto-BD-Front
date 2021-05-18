@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import { uiReducer } from './uiReducers';
+import { authReducer } from '../auth/authReducer';
 
+// Aqui llegan todos los reducers
 export const rootReducer = combineReducers({
-    ui: uiReducer,
-    //TODO: AuthReducerS
+    auth: authReducer
 });

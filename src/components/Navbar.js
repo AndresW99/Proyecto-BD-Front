@@ -26,7 +26,7 @@ export const Navbar = () => {
                         exact
                         to="/productos"
                     >
-                        Productos
+                        Proveedores
                     </NavLink>
 
                     <NavLink 
@@ -50,7 +50,8 @@ export const Navbar = () => {
                     <button 
                         className="nav-item nav-link btn" 
                     >
-                        Salir
+                        <i className="fas fa-sign-out-alt"></i>
+                        <span> Salir</span>
                     </button>
                 </ul>
             </div>
