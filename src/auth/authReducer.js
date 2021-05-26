@@ -14,10 +14,25 @@ export const authReducer = ( state = initialState, action ) => {
             
             return {
                 ...state,
-                checking: false,
                 ...action.payload,
+                checking: false,
             }
-    
+        
+        // Si ya esta registrado cambiamos el checking a falso
+        case types.authCheckingFinish:
+
+            return {
+                ...state,
+                checking: false
+            }
+
+        // Hacemos el logout limpiando todo y pasandolo a false
+        case types.authLogout:
+
+            return {
+                checking: false
+            }
+
         default:
             return state;
     }

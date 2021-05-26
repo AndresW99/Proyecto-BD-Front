@@ -26,6 +26,35 @@ const fetchSinToken = ( endpoint, data, method = 'GET' ) =>{
     }
 }
 
+const fetchConToken = ( endpoint, data, method = 'GET' ) =>{
+
+    const url = `${ baseUrl }/${ endpoint }`;
+    
+    // Obtenemos el token del localStorage
+    const token = localStorage.getItem('token') || '';
+
+    // Si es un get retornamos el producto y mandamos el token
+    if( method === 'GET' ) {
+        return fetch( url, {
+            method,
+            headers: {
+                'x-token': token
+            }
+        });
+    } else {
+        return fetch( url, {
+            method,
+            // Los headers unicamente enviaran formato JSON
+            headers: {
+                'Content-type': 'application/json',
+                'x-token': token
+            },
+            body: JSON.stringify( data )
+        });
+    }
+}
+
 export {
-    fetchSinToken
+    fetchSinToken,
+    fetchConToken
 }

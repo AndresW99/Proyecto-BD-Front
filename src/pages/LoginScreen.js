@@ -31,6 +31,7 @@ export const LoginScreen = () => {
             <form 
                 onSubmit={ handleLogin }
                 className="box" 
+                autoComplete="off"
             >
                 <h1>Iniciar sesión</h1>
                 <input 

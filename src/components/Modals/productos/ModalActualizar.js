@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { uiCloseModal } from '../actions/ui';
-import { agregar, clearEvent, productoActualizado } from '../actions/data';
+import { agregar } from '../../../actions/data';
+import { uiCloseModal } from '../../../actions/ui'
+
 // import Swal from 'sweetalert2';
 
 // Centramos el modal 
@@ -29,28 +30,18 @@ const customStyles = {
     proveedor: ''
   }
 
-export const Modals = () => { 
-
-    const dispatch = useDispatch();
-
-    // Seleccionamos el modal del state
-    const { modalOpen } = useSelector( state => state.ui );
-    const { active } = useSelector( state => state.coffe);
-
-    const [nombreValid, setNombreValid] = useState( true );
+export const ModalActualizar = () => { 
 
     const [formValues, setFormValues] = useState(initEvent);
 
+    const [nombreValid, setNombreValid] = useState( true );
+
+    const dispatch = useDispatch();
+
+    const { modalOpen } = useSelector( state => state.ui );
+
     // Exraemos las propiedas del state
     const { nombre, precio, stock, ID, proveedor } = formValues;
-
-    useEffect(() => {
-
-        if( active ) {
-            setFormValues( active );
-        }
-        console.log(active)
-    }, [ active, setFormValues ]);
 
     // Cambiamos los campos del input
     const handleInputChange = ({ target }) => {
@@ -71,29 +62,16 @@ export const Modals = () => {
             return setNombreValid( false );
         }
 
-        if( active ) {
-            dispatch( productoActualizado( formValues ) )
-        }else {
-            dispatch( agregar({
-                ...formValues,
-                proveedor: {
-                    id: new Date().getTime(),
-                    nombre: "aglo"
-                }
-            }))
-        } 
-
-    
-
-
+        dispatch( agregar({
+            ...formValues
+        }))
+        
         setNombreValid( true );
         closeModal();
     }
 
-    // Cerramos el modal
     const closeModal = () => {
         dispatch( uiCloseModal() );   
-        dispatch( clearEvent() );
         setFormValues( initEvent );
     }
 
@@ -106,12 +84,26 @@ export const Modals = () => {
         overlayClassName="modal-fondo"
         closeTimeoutMS={ 200 }
         >
-        <h1> Nuevo producto </h1>
+        <h1> Actualizar producto</h1>
+
         <hr />
+
         <form 
             className="container"
             onSubmit={ handleSubmitForm }
         >
+
+            <div className="form-group">
+                <label>ID</label>
+                <input 
+                    className={`form-control ${ !nombreValid && 'is-invalid' }`} 
+                    placeholder="Café..." 
+                    autoComplete="off"
+                    name="nombre"
+                    value={ nombre }
+                    onChange={ handleInputChange }
+                />
+            </div>
 
             <div className="form-group">
                 <label>Nombre del producto</label>
@@ -124,7 +116,7 @@ export const Modals = () => {
                     onChange={ handleInputChange }
                 />
             </div>
-            <hr/>
+
             <div className="form-group">
                 <label>Precio del producto</label>
                 <input 
@@ -136,7 +128,7 @@ export const Modals = () => {
                     onChange={ handleInputChange }
                 />
             </div>
-            <hr/>
+
             <div className="form-group">
                 <label>Cantidad a ingresar</label>
                 <input 

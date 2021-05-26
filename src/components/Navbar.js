@@ -1,11 +1,19 @@
-import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
+import { startLogout } from '../actions/auth';
 import './styles.css'
-// import { clear } from '../../actions/events';
 
 export const Navbar = () => {
 
-    // const { name } = useSelector(state => state.auth)
+    const { nombre } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+
+        dispatch( startLogout() );
+
+    }
 
     return (
         <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -40,15 +48,16 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            <div className="w-200 order-3 dual-collapse2">
+            <div className="w-200 order-3 dual-collapse2 mb-1">
                 <ul className="navbar-nav ml-auto">
 
                     <span className="nav-item nav-link text-info">
-                        { 'Andres' }
+                        { nombre }
                     </span>
 
                     <button 
-                        className="nav-item nav-link btn" 
+                        className="btn btn-outline-danger right" 
+                        onClick={ handleLogout }
                     >
                         <i className="fas fa-sign-out-alt"></i>
                         <span> Salir</span>
