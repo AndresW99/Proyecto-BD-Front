@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 
 import { uiCloseModal } from '../actions/ui';
-import { agregar, clearEvent, productoActualizado } from '../actions/data';
-// import Swal from 'sweetalert2';
+import { agregar,
+        clearEvent,
+        productoActualizado } from '../actions/data';
+
 
 // Centramos el modal 
 const customStyles = {
@@ -49,7 +51,7 @@ export const Modals = () => {
         if( active ) {
             setFormValues( active );
         }
-        console.log(active)
+
     }, [ active, setFormValues ]);
 
     // Cambiamos los campos del input
@@ -71,6 +73,7 @@ export const Modals = () => {
             return setNombreValid( false );
         }
 
+        // Si el evento esta activo actualiza, si no agrega producto
         if( active ) {
             dispatch( productoActualizado( formValues ) )
         }else {
@@ -82,9 +85,6 @@ export const Modals = () => {
                 }
             }))
         } 
-
-    
-
 
         setNombreValid( true );
         closeModal();

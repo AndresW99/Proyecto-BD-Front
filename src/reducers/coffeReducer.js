@@ -7,10 +7,8 @@ const initialState = {
         nombre: "andres",
         precio: "100",
         stock: "100",
-        // proveedor: {
-        //     id: 1,
-        //     nombre: "Nestle"
-        // }
+        proveedor: 3,
+        ID: 2
     }],
     active: null
 }
@@ -43,7 +41,7 @@ export const coffeReducer = ( state = initialState, action ) => {
             }
 
         // En teoria regresa a null el evento activo //FIXME: Hay que arreglarlo
-        case types.clearEvent: 
+        case types.eventClearEvent: 
         return {
             ...state,
             active: null

@@ -36,14 +36,15 @@ export const CoffeScreen = () => {
     const handleAgregar = (e) => {
 
         dispatch( uiOpenModal() );
-
+        
     }
 
     // Esto pone el objeto seleccionado en el active del store
     const handleActua = (e) => {
 
-        dispatch( productoSeleccionado(e) );
+        dispatch( productoSeleccionado( e ) );
         dispatch( uiOpenModal() );
+
     }
 
     const handleDatos = ( e ) => {
@@ -95,7 +96,8 @@ export const CoffeScreen = () => {
                     <th style={{ width: 150 }}>Nombre</th>
                     <th style={{ width: 150 }}>Precio</th>
                     <th style={{ width: 150 }}>Stock</th>
-                    {/* <th style={{ width: 150 }}>Proveedor</th> */}
+                    {/* <th style={{ width: 150 }}>Proveedor</th>
+                    <th style={{ width: 150 }}>ID</th> */}
                     <th style={{ width: 150 }}>Acciones</th>
                 </tr>
             </thead>
@@ -106,6 +108,8 @@ export const CoffeScreen = () => {
                         <td>{b.nombre}</td>
                         <td>{b.precio}</td>
                         <td>{b.stock}</td>
+                        {/* <td>{b.proveedor}</td>
+                        <td>{b.ID}</td> */}
                         {/* <td>{b.proveedor.nombre}</td> */}
                         <td>
                             <button 

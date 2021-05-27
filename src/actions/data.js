@@ -47,11 +47,11 @@ export const productoActualizado = ( event ) => ({
 
 });
 
-// Seleccioan el producto en el campo active
-export const productoSeleccionado = ( event ) => ({
+// Posiciona el producto en el campo active
+export const productoSeleccionado = ( usuario ) => ({
 
     type: types.uiEventSetActive,
-    payload: event
+    payload: usuario
 
 });
 
