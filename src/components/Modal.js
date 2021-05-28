@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import { uiCloseModal } from '../actions/ui';
 import {    clearEvent,
             eventStartAddNew,
-            productoActualizado } from '../actions/data';
+            eventStartUpdate, } from '../actions/data';
 
 
 // Centramos el modal 
@@ -27,9 +27,10 @@ const customStyles = {
     nombre: '',
     precio: '',
     stock: '',
-    UsuarioId: '',
+    UsuarioId:'',
     ProveedoreId: ''
   }
+
 
 export const Modals = () => { 
 
@@ -75,7 +76,7 @@ export const Modals = () => {
 
         // Si el evento esta activo actualiza, si no agrega producto
         if( active ) {
-            dispatch( productoActualizado( formValues ) )
+            dispatch( eventStartUpdate( formValues ) )
         }else {
             dispatch( eventStartAddNew( formValues ));
         } 
@@ -150,7 +151,7 @@ export const Modals = () => {
                     placeholder="1"
                     autoComplete="off"
                     name="UsuarioId"
-                    value={ UsuarioId }
+                    defaultValue={ UsuarioId }
                     onChange={ handleInputChange }
                 />
             </div>
@@ -162,7 +163,7 @@ export const Modals = () => {
                     placeholder="1"
                     autoComplete="off"
                     name="ProveedoreId"
-                    value={ ProveedoreId } 
+                    defaultValue={ ProveedoreId } 
                     onChange={ handleInputChange }
                 />
             </div>

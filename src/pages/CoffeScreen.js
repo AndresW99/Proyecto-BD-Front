@@ -2,11 +2,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { eventDeleted, evnetStartLoading, productoSeleccionado } from '../actions/data';
+import { eventStartDelete, evnetStartLoading, productoSeleccionado } from '../actions/data';
 
 import { uiOpenModal } from '../actions/ui';
 import { Modals } from '../components/Modal';
-// import { ModalActualizar } from '../components/Modals/productos/ModalActualizar';
+
 
 export const CoffeScreen = () => {
 
@@ -37,18 +37,12 @@ export const CoffeScreen = () => {
     }
 
     // Eliminar productos
-    const handleEliminar = () => {
+    const handleEliminar = (e) => {
 
-        dispatch( eventDeleted() );
+        dispatch( productoSeleccionado(e) );
+        dispatch( eventStartDelete() );
 
     }
-
-    // Este trae los productos //TODO: No usar 
-    // const handleDatos = ( e ) => {
-    //     // Prevenimos que la pagina recarge
-    //     e.preventDefault();
-    //     dispatch( getProductos() );
-    // }
 
     return (
         <div className="mt-5">

@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 import { fetchConToken } from '../helpers/fetch'
 import { types } from '../types/types';
 
@@ -40,8 +42,31 @@ const agregar = ( usuario ) => ({
 
 });
 
+// Actualiza en bd
+export const eventStartUpdate = ( event ) => {
+
+    return async( dispatch ) => {
+
+        try {
+
+            const resp = await fetchConToken(`productos/${ event.id }`, event, 'PUT');
+            const body = await resp.json();
+
+            if( body ) {
+                dispatch( productoActualizado( event ) )
+            } else {
+                Swal.fire('Error', body.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
 // Actualiza el producto de la lista
-export const productoActualizado = ( event ) => ({
+const productoActualizado = ( event ) => ({
 
     type: types.uiEventActualizado,
     payload: event
@@ -56,8 +81,33 @@ export const productoSeleccionado = ( usuario ) => ({
 
 });
 
+// Elimina de la BD
+export const eventStartDelete = () =>{
+
+    return async( dispatch, getState ) => {
+
+        const { id } = getState().coffe.active;
+
+        try {
+
+            const resp = await fetchConToken(`productos/${ id }`, {}, 'DELETE');
+            const body = await resp.json();
+
+            if( body.id ) {
+                dispatch( eventDeleted() )
+            } else {
+                Swal.fire('Error', body.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
 // Elimina el evento
-export const eventDeleted = () => ({ type: types.eventDeleted });
+const eventDeleted = () => ({ type: types.eventDeleted });
 
 // Limpia el campo de active
 export const clearEvent = () => ({ type: types.eventClearEvent });

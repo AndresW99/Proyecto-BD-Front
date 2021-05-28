@@ -54,7 +54,8 @@ export const coffeReducer = ( state = initialState, action ) => {
                     b => ( b.id === action.payload.id ) ? action.payload : b
                 )
             }
-
+        
+        // Elimina los eventos
         case types.eventDeleted:
             
             return {
