@@ -15,8 +15,6 @@ export const eventStartAddNew = ( event ) => {
     
             const resp = await fetchConToken('productos', event, 'POST');
             const body = await resp.json();
-
-            console.log(body);
             
             if( body ) {
                 event.id = body.id;
@@ -30,7 +28,6 @@ export const eventStartAddNew = ( event ) => {
         } catch (error) {
             console.log( error );
         }
-
     }
 }
 

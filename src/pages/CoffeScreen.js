@@ -15,11 +15,13 @@ export const CoffeScreen = () => {
 
     const dispatch = useDispatch();
 
+    // Carga los productos y esta pendiente del body cuando se elimina
     useEffect(() => {
 
         dispatch( evnetStartLoading() );
+        
 
-    }, [ dispatch ]);
+    }, [ dispatch, body]);
 
     // Abrimos el modal
     const handleAgregar = (e) => {
