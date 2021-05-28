@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 
 import { uiCloseModal } from '../actions/ui';
-import { agregar,
-        clearEvent,
-        productoActualizado } from '../actions/data';
+import {    clearEvent,
+            eventStartAddNew,
+            productoActualizado } from '../actions/data';
 
 
 // Centramos el modal 
@@ -27,8 +27,8 @@ const customStyles = {
     nombre: '',
     precio: '',
     stock: '',
-    ID: '',
-    proveedor: ''
+    UsuarioId: '',
+    ProveedoreId: ''
   }
 
 export const Modals = () => { 
@@ -44,7 +44,7 @@ export const Modals = () => {
     const [formValues, setFormValues] = useState(initEvent);
 
     // Exraemos las propiedas del state
-    const { nombre, precio, stock, ID, proveedor } = formValues;
+    const { nombre, precio, stock, UsuarioId, ProveedoreId } = formValues;
 
     useEffect(() => {
 
@@ -77,13 +77,7 @@ export const Modals = () => {
         if( active ) {
             dispatch( productoActualizado( formValues ) )
         }else {
-            dispatch( agregar({
-                ...formValues,
-                proveedor: {
-                    id: new Date().getTime(),
-                    nombre: "aglo"
-                }
-            }))
+            dispatch( eventStartAddNew( formValues ));
         } 
 
         setNombreValid( true );
@@ -106,7 +100,7 @@ export const Modals = () => {
         overlayClassName="modal-fondo"
         closeTimeoutMS={ 200 }
         >
-        <h1> Nuevo producto </h1>
+        <h1> { ( active ) ? 'Editar producto' : 'Nuevo producto' } </h1>
         <hr />
         <form 
             className="container"
@@ -155,8 +149,8 @@ export const Modals = () => {
                     className={`form-control ${ !nombreValid && 'is-invalid' }`}  
                     placeholder="1"
                     autoComplete="off"
-                    name="ID"
-                    value={ ID }
+                    name="UsuarioId"
+                    value={ UsuarioId }
                     onChange={ handleInputChange }
                 />
             </div>
@@ -167,8 +161,8 @@ export const Modals = () => {
                     className={`form-control ${ !nombreValid && 'is-invalid' }`}  
                     placeholder="1"
                     autoComplete="off"
-                    name="proveedor"
-                    value={ proveedor } 
+                    name="ProveedoreId"
+                    value={ ProveedoreId } 
                     onChange={ handleInputChange }
                 />
             </div>

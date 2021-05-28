@@ -4,14 +4,18 @@ export const types = {
     agregarProducto: '[data] Agregar producto', // Agrega un producto 
     eventClearEvent: '[data] Limpiar el evento activo', // Limpia el campo active
 
+    // Eliminar evento
+    eventDeleted: '[data] Eliminar evento',
+
+    //Carga los eventos
+    eventLoaded: '[data] Eventos cargados',
+
     // Types para el funcionamiento de la UI
     uiOpenModal: '[ui] Open Modal',
     uiCloseModal: '[ui] Close Modal',
     uiOpenModalActu: '[ui] Actu Modal',
     
     // Types para el manejo de los datos de la API
-    
-    dataProductos: '[data] Obtener productos',
     eventStartAddNew: '[data] Agrega un nuevo producto a bd',
     uiEventActualizado: '[data] Evento actualizado', 
 

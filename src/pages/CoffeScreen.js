@@ -1,8 +1,8 @@
 // import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getProductos, productoSeleccionado } from '../actions/data';
+import { eventDeleted, evnetStartLoading, productoSeleccionado } from '../actions/data';
 
 import { uiOpenModal } from '../actions/ui';
 import { Modals } from '../components/Modal';
@@ -15,22 +15,11 @@ export const CoffeScreen = () => {
 
     const dispatch = useDispatch();
 
-    // const baseUrl = 'http://localhost:8080/api/productos'
-    // const [ data, setData ] = useState([]);
+    useEffect(() => {
 
-    // const peticionGet = async() => {
+        dispatch( evnetStartLoading() );
 
-    //     await axios.get( baseUrl )
-    //         .then( res => {
-    //             setData( res.data );
-    //         })
-    // }
-
-    // useEffect(() => {
-
-    //     peticionGet();
-
-    // }, [])
+    }, [ dispatch ]);
 
     // Abrimos el modal
     const handleAgregar = (e) => {
@@ -47,11 +36,19 @@ export const CoffeScreen = () => {
 
     }
 
-    const handleDatos = ( e ) => {
-        // Prevenimos que la pagina recarge
-        e.preventDefault();
-        dispatch( getProductos() );
+    // Eliminar productos
+    const handleEliminar = () => {
+
+        dispatch( eventDeleted() );
+
     }
+
+    // Este trae los productos //TODO: No usar 
+    // const handleDatos = ( e ) => {
+    //     // Prevenimos que la pagina recarge
+    //     e.preventDefault();
+    //     dispatch( getProductos() );
+    // }
 
     return (
         <div className="mt-5">
@@ -75,7 +72,6 @@ export const CoffeScreen = () => {
         &nbsp;
         <button 
             className="btn btn-primary"
-            onClick={handleDatos}
         >
             Siguientes
         </button>
@@ -96,30 +92,34 @@ export const CoffeScreen = () => {
                     <th style={{ width: 150 }}>Nombre</th>
                     <th style={{ width: 150 }}>Precio</th>
                     <th style={{ width: 150 }}>Stock</th>
-                    {/* <th style={{ width: 150 }}>Proveedor</th>
-                    <th style={{ width: 150 }}>ID</th> */}
+                    <th style={{ width: 150 }}>Proveedor</th>
+                    <th style={{ width: 150 }}>Creado</th>
                     <th style={{ width: 150 }}>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                {body && body.map( b =>   //FIXME: Regresar a su estado anterior cuando tenga ID estable
-                    <tr key={b.nombre}>
+                {body && body.map( b =>
+                    <tr key={b.id}>
                         <td>{b.id}</td>
                         <td>{b.nombre}</td>
                         <td>{b.precio}</td>
                         <td>{b.stock}</td>
-                        {/* <td>{b.proveedor}</td>
-                        <td>{b.ID}</td> */}
-                        {/* <td>{b.proveedor.nombre}</td> */}
+                        <td>{b.Proveedore.nombre}</td> 
+                        <td>{b.Usuario.nombre}</td>
                         <td>
                             <button 
                                 className="btn btn-info btn-sm"
                                 onClick={() => handleActua(b) }
-                                >
+                            >
                                 Editar
                             </button>
                             &nbsp;
-                            <button className="btn btn-danger btn-sm">Eliminar</button>
+                            <button 
+                                className="btn btn-danger btn-sm"
+                                onClick={ () => handleEliminar(b) }
+                            >
+                                Eliminar
+                            </button>
                         </td>
                     </tr>
                 )}
@@ -127,8 +127,6 @@ export const CoffeScreen = () => {
         </table>
 
         <Modals />
-
-        {/* <ModalActualizar /> */}
 
     </div>
     )

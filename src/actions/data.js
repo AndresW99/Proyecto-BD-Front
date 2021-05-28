@@ -1,38 +1,39 @@
-import { fetchSinToken } from '../helpers/fetch'
+import { fetchConToken } from '../helpers/fetch'
 import { types } from '../types/types';
 
-// Proceso de autenticación
 
-// Recibe por argumento el correo y contrasenia
-export const getProductos = ( id, nombre, precio, stock ) => {
+// Agregar producto en BD
+export const eventStartAddNew = ( event ) => {
 
-    return async( dispatch ) => {
+    return async( dispatch, getState ) => {
 
-        // Llamamos al fetch sin token
-        const resp = await fetchSinToken( 'productos', { id, nombre, precio, stock }, 'GET' );
-        const body = await resp.json();
+        const { id, nombre } = getState().auth;
 
-        // Si todo se realizo correctamente guardamos token el localStorage
-        if( body ) {
+        try {
+    
+            const resp = await fetchConToken('productos', event, 'POST');
+            const body = await resp.json();
+
+            console.log(body);
             
-            // Grabamos la informacion en el store
-            dispatch( data({
-                body
-            }))
+            if( body ) {
+                event.id = body.id;
+                event.user = {
+                    id: id,
+                    nombre: nombre
+                }
+                dispatch( agregar( event ) );
+            }
+
+        } catch (error) {
+            console.log( error );
         }
+
     }
 }
 
-// Llamamos al type de login
-const data = ( usuario ) => ({
-
-    type: types.dataProductos,
-    payload: usuario
-
-});
-
 // Agrega un producto
-export const agregar = ( usuario ) => ({
+const agregar = ( usuario ) => ({
 
     type: types.agregarProducto,
     payload: usuario
@@ -55,5 +56,33 @@ export const productoSeleccionado = ( usuario ) => ({
 
 });
 
+// Elimina el evento
+export const eventDeleted = () => ({ type: types.eventDeleted });
+
 // Limpia el campo de active
 export const clearEvent = () => ({ type: types.eventClearEvent });
+
+export const evnetStartLoading = () => {
+
+    return async( dispatch ) => {
+
+        try {
+            
+            const resp = await fetchConToken( 'productos' );
+            const body = await resp.json();
+
+            const producs = body;
+
+            dispatch( eventLoaded( producs ) );
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
+const eventLoaded = ( events ) => ({
+    type: types.eventLoaded,
+    payload: events
+})

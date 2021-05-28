@@ -2,14 +2,7 @@ import { types } from '../types/types';
 
 
 const initialState = {
-    body: [{
-        id: 1,
-        nombre: "andres",
-        precio: "100",
-        stock: "100",
-        proveedor: 3,
-        ID: 2
-    }],
+    body: [],
     active: null
 }
 
@@ -17,14 +10,17 @@ export const coffeReducer = ( state = initialState, action ) => {
 
     switch ( action.type ) {
 
-        case types.dataProductos: 
+        // Trae eventos fer
+        case types.eventLoaded:
+
             return {
                 ...state,
-                ...action.payload,
+                body: [ ...action.payload ]
             }
 
         // Agrega un producto
         case types.agregarProducto:
+
             return {
                 ...state,
                 body: [
@@ -35,23 +31,36 @@ export const coffeReducer = ( state = initialState, action ) => {
 
         // Setea el objeto en el campo active
         case types.uiEventSetActive:
+
             return {
                 ...state,
                 active: action.payload
             }
 
-        // En teoria regresa a null el evento activo //FIXME: Hay que arreglarlo
-        case types.eventClearEvent: 
-        return {
-            ...state,
-            active: null
-        }
+        // Regresa a null el evento activo luego de cerrar el modal
+        case types.eventClearEvent:
 
+            return {
+                ...state,
+                active: null
+            }
+
+        // Actualiza los eventos
         case types.uiEventActualizado:
+            
             return {
                 ...state,
                 body: state.body.map(
                     b => ( b.id === action.payload.id ) ? action.payload : b
+                )
+            }
+
+        case types.eventDeleted:
+            
+            return {
+                ...state,
+                body: state.body.filter(
+                    b => ( b.id !== state.id ) 
                 )
             }
     
