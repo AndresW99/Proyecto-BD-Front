@@ -49,8 +49,6 @@ export const provStartAddNew = ( event ) => {
             if( body.id ) {
                 // Agarra el id y lo agrega
                 // event.id = body.id;
-
-                console.log(body);
                 dispatch( agregarProv( body ) )
             }
 
@@ -89,6 +87,29 @@ export const eventStartUpdate = ( event ) => {
     }
 }
 
+// Actualiza en bd proveedor
+export const provStartUpdate = ( event ) => {
+
+    return async( dispatch ) => {
+
+        try {
+
+            const resp = await fetchConToken(`proveedor/${ event.id }`, event, 'PUT');
+            const body = await resp.json();
+
+            if( body ) {
+                dispatch( proveActualizado( event ) )
+            } else {
+                Swal.fire('Error', body.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
 // Actualiza el producto de la lista
 const productoActualizado = ( event ) => ({
 
@@ -97,6 +118,11 @@ const productoActualizado = ( event ) => ({
 
 });
 
+const proveActualizado = ( event ) => ({
+    type: types.provActualizado,
+    payload: event
+})
+
 // Posiciona el producto en el campo active
 export const productoSeleccionado = ( usuario ) => ({
 
@@ -104,6 +130,12 @@ export const productoSeleccionado = ( usuario ) => ({
     payload: usuario
 
 });
+
+// Posicion al proveedor en el campo active
+export const proveedorSeleccionado = ( event ) => ({
+    type: types.provSetActive,
+    payload: event
+})
 
 // Elimina de la BD
 export const eventStartDelete = () =>{
@@ -130,11 +162,42 @@ export const eventStartDelete = () =>{
     }
 }
 
+// Elimina de la BD
+export const provStartDelete = () =>{
+
+    return async( dispatch, getState ) => {
+
+        const { id } = getState().prov.active;
+
+        try {
+
+            const resp = await fetchConToken(`proveedor/${ id }`, {}, 'DELETE');
+            const body = await resp.json();
+
+            if( body ) {
+                dispatch( provDelete() )
+            } else {
+                Swal.fire('Error', body.msg, 'error');
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
 // Elimina el evento
 const eventDelete = () => ({ type: types.eventDeleted });
 
+// Elimina proveedor
+const provDelete = () => ({ type: types.provDeleted });
+
 // Limpia el campo de active
 export const clearEvent = () => ({ type: types.eventClearEvent });
+
+// Limpia el active del prov
+export const clearProv = () => ({ type: types.provClearEvent });
 
 // Carga a los productos
 export const evnetStartLoading = () => {

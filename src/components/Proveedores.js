@@ -1,18 +1,85 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { proveStartLoading } from '../actions/data';
+import Swal from 'sweetalert2';
+import { clearProv, proveedorSeleccionado, proveStartLoading, provStartDelete } from '../actions/data';
+import { uiOpenModal } from '../actions/ui';
+import { ModalProv } from './ModalProv';
 
 export const Proveedores = () => {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    // Hace que la pagina elimine el evento sin recargar
+    const [updateTrigger, setUpdateTrigger] = useState({});
 
     const dispatch = useDispatch();
     const { body } = useSelector( state => state.prov );
 
-        useEffect(() => {
-    
+    useEffect(() => {
+
+        setTimeout(() => {
             dispatch(proveStartLoading() );
+        }, 200);
 
-        }, [ dispatch ]);
+    }, [ dispatch, updateTrigger ]);
 
+
+    const handleAgregar = () => {
+
+        dispatch( uiOpenModal() );
+
+    }
+
+    // Esto pone el objeto seleccionado en el active del store
+    const handleActua = (e) => {
+
+        dispatch( proveedorSeleccionado( e ) );
+        dispatch( uiOpenModal() );
+    }
+
+    const handleEliminar = async( e ) => {
+
+        dispatch( proveedorSeleccionado( e ) );
+
+         await Swal.fire({
+            title: 'Estas seguro?',
+            text: "No podras revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminalo!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+               Swal.fire(
+                'Eliminado!',
+                'El producto fue eliminado.',
+                'success'
+              )
+                dispatch( provStartDelete() );
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+              ) {
+                swalWithBootstrapButtons.fire(
+                  'Cancelado',
+                  'El producto esta a salvo :)',
+                  'error'
+                )
+                dispatch( clearProv() );
+              }
+          })
+
+        setUpdateTrigger(Math.random() )
+
+    }
+    
 
 
     return (
@@ -43,6 +110,7 @@ export const Proveedores = () => {
 
             <button
                 className="btn btn-outline-success float-end"
+                onClick={ handleAgregar }
             >
                 Agregar
             </button>
@@ -58,22 +126,35 @@ export const Proveedores = () => {
                         <th style={{ width: 150 }}>Acciones</th>
                     </tr>
                 </thead>
-                <tbody className="flex">
+                <tbody>
                     {body && body.map( b=>                
                         <tr key={ b.id }>
                             <td>{ b.id }</td>
                             <td>{ b.nombre }</td>
                             <td>{b.usuario}</td>
                             <td>
-                                <button className="btn btn-info btn-sm">Editar</button>
+                                <button 
+                                    className="btn btn-info btn-sm"
+                                    onClick={ () => handleActua( b ) }
+                                >
+                                    Editar
+                                </button>
                                 &nbsp;
-                                <button className="btn btn-danger btn-sm">Eliminar</button>
+                                <button 
+                                    className="btn btn-danger btn-sm"
+                                    onClick={ () => handleEliminar( b ) }
+                                >
+                                    Eliminar
+                                </button>
                             </td>
                         </tr>
                 
                     )}
                 </tbody>
             </table>
+
+        <ModalProv />
+
         </div>
     )
 }
