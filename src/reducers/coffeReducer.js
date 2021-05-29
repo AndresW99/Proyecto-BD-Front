@@ -62,7 +62,8 @@ export const coffeReducer = ( state = initialState, action ) => {
                 ...state,
                 body: state.body.filter(
                     b => ( b.id !== state.id ) 
-                )
+                ),
+                active: null
             }
     
         default:

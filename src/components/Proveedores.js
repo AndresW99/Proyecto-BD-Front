@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { proveStartLoading } from '../actions/data';
 
 export const Proveedores = () => {
 
+    const dispatch = useDispatch();
+    const { body } = useSelector( state => state.prov );
+
+        useEffect(() => {
     
+            dispatch(proveStartLoading() );
+
+        }, [ dispatch ]);
+
+
 
     return (
         <div className="mt-5">
@@ -43,17 +54,16 @@ export const Proveedores = () => {
                     <tr>
                         <th style={{ width: 100 }}>ID</th>
                         <th style={{ width: 150 }}>Nombre</th>
-                        <th style={{ width: 150 }}>Disponible</th>
+                        <th style={{ width: 150 }}>Creado por:</th>
                         <th style={{ width: 150 }}>Acciones</th>
                     </tr>
                 </thead>
                 <tbody className="flex">
-                    {
-                        
-                        <tr>
-                            <td>1</td>
-                            <td>Nescafe</td>
-                            <td>No</td>
+                    {body && body.map( b=>                
+                        <tr key={ b.id }>
+                            <td>{ b.id }</td>
+                            <td>{ b.nombre }</td>
+                            <td>{b.usuario}</td>
                             <td>
                                 <button className="btn btn-info btn-sm">Editar</button>
                                 &nbsp;
@@ -61,7 +71,7 @@ export const Proveedores = () => {
                             </td>
                         </tr>
                 
-                    }
+                    )}
                 </tbody>
             </table>
         </div>

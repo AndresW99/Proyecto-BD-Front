@@ -2,6 +2,8 @@ export const types = {
 
     uiEventSetActive: '[data] Evento seleccionado', // Setea la fila seleccionada en el active
     agregarProducto: '[data] Agregar producto', // Agrega un producto 
+    agregarProv: '[prov] Agregar proveedor',
+    agregarEmp: '[emp] Agregar empleado',
     eventClearEvent: '[data] Limpiar el evento activo', // Limpia el campo active
 
     // Eliminar evento
@@ -9,6 +11,8 @@ export const types = {
 
     //Carga los eventos
     eventLoaded: '[data] Eventos cargados',
+    provLoaded: '[prov] Eventos cargados',
+    empLoaded: '[emp] Empleados cargados',
 
     // Types para el funcionamiento de la UI
     uiOpenModal: '[ui] Open Modal',
