@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { empStartLoading } from '../actions/data';
 
 export const Empleados = () => {
+
+    const dispatch = useDispatch();
+    const { body } = useSelector( state => state.emp );
+
+    useEffect(() => {
+        
+        dispatch( empStartLoading() );
+
+    }, [ dispatch ]);
+
     return (
         <div className="mt-5">
                 
@@ -41,16 +53,17 @@ export const Empleados = () => {
                         <th style={{ width: 100 }}>ID</th>
                         <th style={{ width: 150 }}>Nombre</th>
                         <th style={{ width: 150 }}>Correo</th>
+                        <th style={{ width: 150 }}>Rol</th>
                         <th style={{ width: 150 }}>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        
-                        <tr>
-                            <td>1</td>
-                            <td>Nescafe</td>
-                            <td>No</td>
+                    {body && body.map( b =>        
+                        <tr key={ b.id }>
+                            <td>{ b.id }</td>
+                            <td>{ b.nombre }</td>
+                            <td>{ b.correo }</td>
+                            <td>{ b.rol }</td>
                             <td>
                                 <button className="btn btn-info btn-sm">Editar</button>
                                 &nbsp;
@@ -58,7 +71,7 @@ export const Empleados = () => {
                             </td>
                         </tr>
                 
-                    }
+                    )}
                 </tbody>
             </table>
 

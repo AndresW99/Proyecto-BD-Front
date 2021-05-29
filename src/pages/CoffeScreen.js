@@ -1,14 +1,25 @@
-// import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
-import { eventStartDelete, evnetStartLoading, productoSeleccionado } from '../actions/data';
+import { clearEvent, eventStartDelete, evnetStartLoading, productoSeleccionado } from '../actions/data';
 
 import { uiOpenModal } from '../actions/ui';
 import { Modals } from '../components/Modal';
 
 
 export const CoffeScreen = () => {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    // Hace que la pagina elimine el evento sin recargar
+    const [updateTrigger, setUpdateTrigger] = useState({});
 
     // Extraemos los productosd del state
     const { body } = useSelector( state => state.coffe );
@@ -18,10 +29,11 @@ export const CoffeScreen = () => {
     // Carga los productos y esta pendiente del body cuando se elimina
     useEffect(() => {
 
-        dispatch( evnetStartLoading() );
-        
+        setTimeout(() => {      
+            dispatch( evnetStartLoading() );
+        }, 200);
 
-    }, [ dispatch, body]);
+    }, [ dispatch, updateTrigger ]);
 
     // Abrimos el modal
     const handleAgregar = (e) => {
@@ -39,11 +51,41 @@ export const CoffeScreen = () => {
     }
 
     // Eliminar productos
-    const handleEliminar = (e) => {
+    const handleEliminar = async(e) => {
 
-        dispatch( productoSeleccionado(e) );
-        dispatch( eventStartDelete() );
+        dispatch( productoSeleccionado( e ) );
+        // await dispatch( eventStartDelete() );
 
+         await Swal.fire({
+            title: 'Estas seguro?',
+            text: "No podras revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, eliminalo!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+               Swal.fire(
+                'Eliminado!',
+                'El producto fue eliminado.',
+                'success'
+              )
+                dispatch( eventStartDelete() );
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+              ) {
+                swalWithBootstrapButtons.fire(
+                  'Cancelado',
+                  'El producto esta a salvo :)',
+                  'error'
+                )
+                dispatch( clearEvent() );
+              }
+          })
+
+        setUpdateTrigger(Math.random() )
     }
 
     return (
@@ -88,8 +130,6 @@ export const CoffeScreen = () => {
                     <th style={{ width: 150 }}>Nombre</th>
                     <th style={{ width: 150 }}>Precio</th>
                     <th style={{ width: 150 }}>Stock</th>
-                    <th style={{ width: 150 }}>Proveedor</th>
-                    <th style={{ width: 150 }}>Creado</th>
                     <th style={{ width: 150 }}>Acciones</th>
                 </tr>
             </thead>
@@ -100,8 +140,6 @@ export const CoffeScreen = () => {
                         <td>{b.nombre}</td>
                         <td>{b.precio}</td>
                         <td>{b.stock}</td>
-                        <td>{b.Proveedore.nombre}</td> 
-                        <td>{b.Usuario.nombre}</td>
                         <td>
                             <button 
                                 className="btn btn-info btn-sm"

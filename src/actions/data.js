@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-import { fetchConToken } from '../helpers/fetch'
+import { fetchConToken, fetchSinToken } from '../helpers/fetch'
 import { types } from '../types/types';
 
 
@@ -8,25 +8,22 @@ import { types } from '../types/types';
 export const eventStartAddNew = ( event ) => {
 
     return async( dispatch, getState ) => {
-
-        const { id, nombre } = getState().auth;
-
+        
         try {
-    
-            const resp = await fetchConToken('productos', event, 'POST');
-            const body = await resp.json();
             
-            if( body ) {
-                event.id = body.id;
-                event.user = {
-                    id: id,
-                    nombre: nombre
-                }
-                dispatch( agregar( event ) );
+            const resp = await fetchConToken('productos', event, 'POST')
+            const body = await resp.json();
+
+            if( body.id ) {
+                // Agarra el id y lo agrega
+                // event.id = body.id;
+
+                console.log(body);
+                dispatch( agregar( body ) )
             }
 
         } catch (error) {
-            console.log( error );
+            console.log(error);
         }
     }
 }
@@ -38,6 +35,36 @@ const agregar = ( usuario ) => ({
     payload: usuario
 
 });
+
+// Agregar proveedor en BD
+export const provStartAddNew = ( event ) => {
+
+    return async( dispatch, getState ) => {
+        
+        try {
+            
+            const resp = await fetchConToken('proveedor', event, 'POST')
+            const body = await resp.json();
+
+            if( body.id ) {
+                // Agarra el id y lo agrega
+                // event.id = body.id;
+
+                console.log(body);
+                dispatch( agregarProv( body ) )
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+// Agrega un producto al body
+const agregarProv = ( event ) => ({
+    type: types.agregarProv,
+    payload: event
+})
 
 // Actualiza en bd
 export const eventStartUpdate = ( event ) => {
@@ -90,8 +117,8 @@ export const eventStartDelete = () =>{
             const resp = await fetchConToken(`productos/${ id }`, {}, 'DELETE');
             const body = await resp.json();
 
-            if( body.id ) {
-                dispatch( eventDeleted() )
+            if( body ) {
+                dispatch( eventDelete() )
             } else {
                 Swal.fire('Error', body.msg, 'error');
             }
@@ -104,11 +131,12 @@ export const eventStartDelete = () =>{
 }
 
 // Elimina el evento
-const eventDeleted = () => ({ type: types.eventDeleted });
+const eventDelete = () => ({ type: types.eventDeleted });
 
 // Limpia el campo de active
 export const clearEvent = () => ({ type: types.eventClearEvent });
 
+// Carga a los productos
 export const evnetStartLoading = () => {
 
     return async( dispatch ) => {
@@ -125,11 +153,63 @@ export const evnetStartLoading = () => {
         } catch (error) {
             console.log(error);
         }
-
     }
 }
 
+// Carga los proveedores
+export const proveStartLoading = () =>{
+
+    return async( dispatch ) => {
+
+        try {
+            
+            const resp = await fetchSinToken( 'proveedor' );
+            const body = await resp.json();
+
+            const producs = body;
+
+            dispatch( provLoad( producs ) );
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+// Carga los empleados
+export const empStartLoading = () =>{
+
+    return async( dispatch ) => {
+
+        try {
+            
+            const resp = await fetchSinToken( 'usuarios' );
+            const body = await resp.json();
+
+            const producs = body;
+
+            dispatch( empLoad( producs ) );
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+// Setea los objetos en el store
 const eventLoaded = ( events ) => ({
     type: types.eventLoaded,
+    payload: events
+})
+
+// Setea los objetos en el store
+const provLoad = ( events ) => ({
+    type: types.provLoaded,
+    payload: events
+})
+
+// Setea a los empleados en el store
+const empLoad = ( events ) => ({
+    type: types.empLoaded,
     payload: events
 })
