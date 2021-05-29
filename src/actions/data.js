@@ -15,8 +15,6 @@ export const eventStartAddNew = ( event ) => {
             const body = await resp.json();
 
             if( body.id ) {
-                // Agarra el id y lo agrega
-                // event.id = body.id;
 
                 console.log(body);
                 dispatch( agregar( body ) )
@@ -118,6 +116,7 @@ const productoActualizado = ( event ) => ({
 
 });
 
+// Actualiza el proveedor
 const proveActualizado = ( event ) => ({
     type: types.provActualizado,
     payload: event
@@ -149,7 +148,7 @@ export const eventStartDelete = () =>{
             const resp = await fetchConToken(`productos/${ id }`, {}, 'DELETE');
             const body = await resp.json();
 
-            if( body ) {
+            if( body.id ) {
                 dispatch( eventDelete() )
             } else {
                 Swal.fire('Error', body.msg, 'error');
@@ -174,7 +173,7 @@ export const provStartDelete = () =>{
             const resp = await fetchConToken(`proveedor/${ id }`, {}, 'DELETE');
             const body = await resp.json();
 
-            if( body ) {
+            if( body.id ) {
                 dispatch( provDelete() )
             } else {
                 Swal.fire('Error', body.msg, 'error');

@@ -29,7 +29,44 @@ export const empleadoReducer = ( state = initialState, action ) => {
                     action.payload
                 ]
             }
-    
+        
+        // Pone el objeto en el active del store
+        case types.empSetActive:
+
+            return {
+                ...state,
+                active: action.payload
+            }
+
+        // Cambia a null el evento activo
+        case types.empClearEvent:
+
+            return {
+                ...state,
+                active: null
+            }
+
+        // Actualiza el usuario
+        case types.empActualizado: 
+
+            return {
+                ...state,
+                body: state.body.map(
+                    b => ( b.id === action.payload.id ) ? action.payload : b
+                )
+            }
+            
+        // Eliminar usuario de la BD
+        case types.empDeleted:
+
+            return {
+                ...state,
+                body: state.body.filter(
+                    b => ( b.id !== state.id ) 
+                ),
+                active: null
+            }
+
         default:
             return state;
     }

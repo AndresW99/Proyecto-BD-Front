@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import Swal from 'sweetalert2';
+
 import { clearProv, proveedorSeleccionado, proveStartLoading, provStartDelete } from '../actions/data';
 import { uiOpenModal } from '../actions/ui';
 import { ModalProv } from './ModalProv';
@@ -59,7 +61,7 @@ export const Proveedores = () => {
             if (result.isConfirmed) {
                Swal.fire(
                 'Eliminado!',
-                'El producto fue eliminado.',
+                'El proveedor fue eliminado.',
                 'success'
               )
                 dispatch( provStartDelete() );
@@ -69,7 +71,7 @@ export const Proveedores = () => {
               ) {
                 swalWithBootstrapButtons.fire(
                   'Cancelado',
-                  'El producto esta a salvo :)',
+                  'El proveedor esta a salvo :)',
                   'error'
                 )
                 dispatch( clearProv() );

@@ -1,17 +1,81 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Swal from 'sweetalert2';
+
 import { empStartLoading } from '../actions/data';
+import { clearEmp, empleadoSeleccionado, empStartDelete } from '../actions/empleados';
+import { uiOpenModal } from '../actions/ui';
+import { ModalEmp } from './ModalEmp';
 
 export const Empleados = () => {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
 
     const dispatch = useDispatch();
     const { body } = useSelector( state => state.emp );
 
+    // Hace que la pagina elimine el evento sin recargar
+    const [updateTrigger, setUpdateTrigger] = useState({});
+
     useEffect(() => {
         
-        dispatch( empStartLoading() );
+        setTimeout(() => {
+            dispatch( empStartLoading() );
+        }, 300);
 
-    }, [ dispatch ]);
+    }, [ dispatch, updateTrigger ]);
+
+    // Esto pone el objeto seleccionado en el active del store
+    const handleActua = (e) => {
+
+        dispatch( empleadoSeleccionado( e ) );
+        dispatch( uiOpenModal() );
+    }
+
+    const handleEliminar = async(e) => {
+
+        dispatch( empleadoSeleccionado( e ) );
+
+        await Swal.fire({
+           title: 'Estas seguro?',
+           text: "No podras revertir esto!",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'Si, eliminalo!'
+         }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Eliminado!',
+                'El usuario fue eliminado.',
+                'success'
+                )
+                    dispatch( empStartDelete() );
+            } else if (
+               /* Read more about handling dismissals below */
+               result.dismiss === Swal.DismissReason.cancel
+            ) {
+               swalWithBootstrapButtons.fire(
+                 'Cancelado',
+                 'El usuario esta a salvo :)',
+                 'error'
+               )
+               dispatch( clearEmp() );
+            }
+         })
+
+       setUpdateTrigger(Math.random() )
+
+    }
+
 
     return (
         <div className="mt-5">
@@ -39,12 +103,6 @@ export const Empleados = () => {
                 Siguientes
             </button>
 
-            <button
-                className="btn btn-outline-success float-end"
-            >
-                Agregar
-            </button>
-
             <hr />
 
             <table className="table table-dark table-striped table-hover table-bordered">
@@ -65,16 +123,27 @@ export const Empleados = () => {
                             <td>{ b.correo }</td>
                             <td>{ b.rol }</td>
                             <td>
-                                <button className="btn btn-info btn-sm">Editar</button>
+                                <button 
+                                    className="btn btn-info btn-sm"
+                                    onClick={ () => handleActua( b ) }
+                                >
+                                    Editar
+                                </button>
                                 &nbsp;
-                                <button className="btn btn-danger btn-sm">Eliminar</button>
+                                <button 
+                                    className="btn btn-danger btn-sm"
+                                    onClick={ () => handleEliminar( b ) }
+                                >
+                                    Eliminar
+                                </button>
                             </td>
                         </tr>
                 
                     )}
                 </tbody>
             </table>
-
+        
+        <ModalEmp />
             
         </div>
     )
