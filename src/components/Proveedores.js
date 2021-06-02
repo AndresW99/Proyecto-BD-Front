@@ -9,13 +9,45 @@ import { ModalProv } from './ModalProv';
 
 export const Proveedores = () => {
 
+    // Estado para manejar la busqueda
+    const [search, setSearch] = useState('');
+
+    // Estado para manejar la paginacion 
+    const [currentPage, setCurrentPage] = useState(0);
+
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
           cancelButton: 'btn btn-danger'
         },
         buttonsStyling: false
-    })
+    });
+
+    // Filtra a los proveedores por letra
+    const filtrarProveedor = () => {
+
+        if( search.length === 0 ) 
+            return body.slice(currentPage, currentPage + 5);
+
+        // Si hay algo en la caja de texto
+        const filtered = body.filter( b => b.nombre.includes( search ) );
+        return filtered.slice( currentPage, currentPage + 5);
+    }
+
+    const nextPage = () => {
+        if ( body.filter( b => b.nombre.includes( search ) ).length > currentPage + 5 )
+            setCurrentPage( currentPage + 5 );
+    }
+
+    const prevPage = () => {
+        if ( currentPage > 0 )
+            setCurrentPage( currentPage - 5 );
+    }
+
+    const onSearchChange = ({ target }) => {
+        setCurrentPage(0);
+        setSearch( target.value );
+    }
 
     // Hace que la pagina elimine el evento sin recargar
     const [updateTrigger, setUpdateTrigger] = useState({});
@@ -94,18 +126,22 @@ export const Proveedores = () => {
                 type="text"
                 className="mb-2 form-control"
                 placeholder="Buscar proveedor..."
+                value={ search }
+                onChange={ onSearchChange }
             />
 
             <hr />  
 
             <button 
                 className="btn btn-primary"
+                onClick={ prevPage }
             >
                 Anteriores
             </button>
             &nbsp;
             <button 
                 className="btn btn-primary"
+                onClick={ nextPage }
             >
                 Siguientes
             </button>
@@ -129,7 +165,7 @@ export const Proveedores = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {body && body.map( b=>                
+                    {filtrarProveedor && filtrarProveedor().map( b=>                
                         <tr key={ b.id }>
                             <td>{ b.id }</td>
                             <td>{ b.nombre }</td>

@@ -23,7 +23,7 @@ export const empStartUpdate = ( event ) => {
             const resp = await fetchConToken(`usuarios/${ event.id }`, event, 'PUT');
             const body = await resp.json();
 
-            if( body ) {
+            if( body.id ) {
                 dispatch( empActualizado( event ) )
             } else {
                 Swal.fire('Error', body.msg, 'error');

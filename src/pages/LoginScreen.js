@@ -13,8 +13,8 @@ export const LoginScreen = () => {
     const dispatch = useDispatch();
     
     const [ formLoginValues, handleLoginInputChange ] = useForm({
-        correo: 'paola1@gmail.com',
-        contrasenia: '1234567'
+        correo: '',
+        contrasenia: ''
     });
 
     const { correo, contrasenia } = formLoginValues

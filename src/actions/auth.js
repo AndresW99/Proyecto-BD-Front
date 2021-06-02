@@ -11,7 +11,7 @@ export const startLogin = ( correo, contrasenia ) => {
 
         // Llamamos al fetch sin token
         const resp = await fetchSinToken( 'auth', { correo, contrasenia }, 'POST' );
-        const body = await resp.json()
+        const body = await resp.json();
    
         // Si todo se realizo correctamente guardamos token el localStorage
         if( resp.ok ) {

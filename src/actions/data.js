@@ -16,7 +16,6 @@ export const eventStartAddNew = ( event ) => {
 
             if( body.id ) {
 
-                console.log(body);
                 dispatch( agregar( body ) )
             }
 
